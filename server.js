@@ -3,13 +3,15 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt-nodejs'
-import crypto from 'crypto'
 import User from './models/user'
+import Product from './models/product'
 
-// ERROR MESSAGES
-const ERR_CANNOT_CREATE = 'Could not create user.'
+// MESSAGES
+const ERR_CANNOT_CREATE_USER = 'Could not create user.'
+const ERR_CANNOT_CREATE_PRODUCT = 'Could not create product.'
 const ERR_CANNOT_LOGIN = 'Please try log in again.'
 const ERR_CANNOT_ACCESS = 'Access token is missing or wrong.'
+const PRODUCT_CREATED = 'Product is created.'
 
 // SERVER SET UP
 
@@ -39,10 +41,32 @@ const authenticateUser = async (req, res, next) => {
   }
 }
 
-// ROUTES
 app.get('/', (req, res) => {
   res.send('Hello world')
 })
+
+/* ---- PRODUCTS ---- */
+
+// Get all products
+app.get('/products', async (req, res) => {
+  const products = await Product.find()
+  res.json(products)
+})
+
+// Add products
+app.post('/products', async (req, res) => {
+  try {
+    const { title, image, price, color, description, availableSizes } = req.body
+    const product = new Product({ title, image, price, color, description, availableSizes })
+    const createdProduct = await product.save()
+
+    res.status(201).json({ productId: createdProduct._id, message: PRODUCT_CREATED })
+  } catch (err) {
+    res.status(400).json({ message: ERR_CANNOT_CREATE_PRODUCT, errors: err.errors })
+  }
+})
+
+/* ---- USERS ---- */
 
 // Get all users
 app.get('/users', async (req, res) => {
@@ -59,7 +83,7 @@ app.post('/users', async (req, res) => {
 
     res.status(201).json({ userId: createdUser._id, accessToken: createdUser.accessToken })
   } catch (err) {
-    res.status(400).json({ message: ERR_CANNOT_CREATE, errors: err.errors })
+    res.status(400).json({ message: ERR_CANNOT_CREATE_USER, errors: err.errors })
   }
 })
 
