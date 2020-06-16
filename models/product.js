@@ -4,9 +4,6 @@ const Product = mongoose.model('Product', {
   title: {
     type: String
   },
-  imageUrl: {
-    type: String
-  },
   price: {
     type: Number
   },
@@ -19,8 +16,11 @@ const Product = mongoose.model('Product', {
   description: {
     type: String
   },
-  availableSizes: {
+  sizes: {
     type: Array
+  },
+  imageUrl: {
+    type: String
   }
 })
 

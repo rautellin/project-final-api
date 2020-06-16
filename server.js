@@ -80,9 +80,15 @@ app.get('/products', async (req, res) => {
 // Add products
 app.post('/products', parser.single('image'), async (req, res) => {
   try {
-    const { title, price, color, description, availableSizes } = req.body
-    const product = await new Product({ title, price, color, description, availableSizes, imageUrl: req.file.path, imageId: req.file.filename }).save()
-
+    const product = await new Product({
+      title: req.body.title,
+      price: req.body.price,
+      color: req.body.color,
+      category: req.body.category,
+      description: req.body.description,
+      sizes: req.body.sizes,
+      imageUrl: req.file.path
+    }).save()
     res.status(201).json({ productId: product._id, message: PRODUCT_CREATED })
   } catch (err) {
     res.status(400).json({ message: ERR_CANNOT_CREATE_PRODUCT, errors: err.errors })
