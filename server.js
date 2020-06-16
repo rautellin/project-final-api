@@ -70,23 +70,6 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
-app.post('/test', async (req, res) => {
-  try {
-    const tested = new Test({
-      title: req.body.title
-    })
-    const saved = await tested.save()
-    res.status(201).json({ testId: saved._id, message: PRODUCT_CREATED })
-  } catch (err) {
-    res.status(400).json({ message: ERR_CANNOT_CREATE_PRODUCT, errors: err.errors })
-  }
-})
-
-app.get('/test', async (req, res) => {
-  const tests = await Test.find()
-  res.json(tests)
-})
-
 /* ---- PRODUCTS ---- */
 
 // Get all products
@@ -98,6 +81,7 @@ app.get('/products', async (req, res) => {
 // Add products
 app.post('/products', parser.single('image'), async (req, res) => {
   try {
+    await Product.deleteMany()
     const product = new Product({
       title: req.body.title,
       price: req.body.price,
