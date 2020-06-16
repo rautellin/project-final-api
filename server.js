@@ -5,7 +5,6 @@ import mongoose from 'mongoose'
 import bcrypt from 'bcrypt-nodejs'
 import User from './models/user'
 import Product from './models/product'
-import Test from './models/test'
 import dotenv from 'dotenv'
 import cloudinaryFramework from 'cloudinary'
 import multer from 'multer'
@@ -81,7 +80,6 @@ app.get('/products', async (req, res) => {
 // Add products
 app.post('/products', parser.single('image'), async (req, res) => {
   try {
-    await Product.deleteMany()
     const product = new Product({
       title: req.body.title,
       price: req.body.price,
