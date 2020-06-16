@@ -104,8 +104,7 @@ app.post('/products', parser.single('image'), async (req, res) => {
       color: req.body.color,
       category: req.body.category,
       description: req.body.description,
-      sizes: req.body.sizes,
-      imageUrl: req.file.path
+      sizes: req.body.sizes
     })
     const newProduct = await product.save()
     res.status(201).json({ productId: newProduct._id, message: PRODUCT_CREATED })
