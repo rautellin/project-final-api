@@ -80,14 +80,14 @@ app.get('/products', async (req, res) => {
 // Add products
 app.post('/products', parser.single('image'), async (req, res) => {
   try {
-    console.log(req.file.path)
     const product = new Product({
       title: req.body.title,
       price: req.body.price,
       color: req.body.color,
       category: req.body.category,
       description: req.body.description,
-      sizes: req.body.sizes
+      sizes: req.body.sizes,
+      imageUrl: req.file.path
     })
     const newProduct = await product.save()
     res.status(201).json({ productId: newProduct._id, message: PRODUCT_CREATED })
