@@ -5,6 +5,7 @@ import mongoose from 'mongoose'
 import bcrypt from 'bcrypt-nodejs'
 import User from './models/user'
 import Product from './models/product'
+import Test from './models/test'
 import dotenv from 'dotenv'
 import cloudinaryFramework from 'cloudinary'
 import multer from 'multer'
@@ -69,6 +70,18 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
+app.post('/test', async (req, res) => {
+  try {
+    const tested = new Test({
+      title: req.body.title
+    })
+    const saved = await tested.save()
+    res.status(201).json({ testId: saved._id, message: PRODUCT_CREATED })
+  } catch (err) {
+    res.status(400).json({ message: ERR_CANNOT_CREATE_PRODUCT, errors: err.errors })
+  }
+})
+
 /* ---- PRODUCTS ---- */
 
 // Get all products
@@ -80,7 +93,7 @@ app.get('/products', async (req, res) => {
 // Add products
 app.post('/products', parser.single('image'), async (req, res) => {
   try {
-    const product = await new Product({
+    const product = new Product({
       title: req.body.title,
       price: req.body.price,
       color: req.body.color,
@@ -88,8 +101,9 @@ app.post('/products', parser.single('image'), async (req, res) => {
       description: req.body.description,
       sizes: req.body.sizes,
       imageUrl: req.file.path
-    }).save()
-    res.status(201).json({ productId: product._id, message: PRODUCT_CREATED })
+    })
+    const newProduct = await product.save()
+    res.status(201).json({ productId: newProduct._id, message: PRODUCT_CREATED })
   } catch (err) {
     res.status(400).json({ message: ERR_CANNOT_CREATE_PRODUCT, errors: err.errors })
   }
