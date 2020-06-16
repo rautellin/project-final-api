@@ -82,6 +82,11 @@ app.post('/test', async (req, res) => {
   }
 })
 
+app.get('/test', async (req, res) => {
+  const tests = await Test.find()
+  res.json(tests)
+})
+
 /* ---- PRODUCTS ---- */
 
 // Get all products
