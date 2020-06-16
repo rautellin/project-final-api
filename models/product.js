@@ -2,47 +2,25 @@ import mongoose from 'mongoose'
 
 const Product = mongoose.model('Product', {
   title: {
-    type: String,
-    required: [true, 'Title is empty']
+    type: String
   },
-  image: {
-    type: String,
-    required: [true, 'Image is empty']
+  imageUrl: {
+    type: String
   },
   price: {
-    type: Number,
-    required: [true, 'Price is empty']
+    type: Number
   },
   color: {
-    type: String,
-    enum:
-      [
-        'Beige',
-        'Black',
-        'Blue',
-        'Brown',
-        'Green',
-        'Purple',
-        'Orange',
-        'Others',
-        'Pink',
-        'Printed',
-        'Red',
-        'White',
-        'Yellow',
-        'Silver',
-        'Gold'
-      ],
-    required: [true, 'Color is empty']
+    type: String
+  },
+  category: {
+    type: String
   },
   description: {
-    type: String,
-    required: true,
-    minlength: [20, 'Description is too short']
+    type: String
   },
   availableSizes: {
-    type: Array,
-    required: [true, 'Size is empty']
+    type: Array
   }
 })
 

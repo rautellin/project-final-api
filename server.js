@@ -5,6 +5,30 @@ import mongoose from 'mongoose'
 import bcrypt from 'bcrypt-nodejs'
 import User from './models/user'
 import Product from './models/product'
+import dotenv from 'dotenv'
+import cloudinaryFramework from 'cloudinary'
+import multer from 'multer'
+import cloudinaryStorage from 'multer-storage-cloudinary'
+
+// CLOUDINARY
+dotenv.config()
+
+const cloudinary = cloudinaryFramework.v2;
+cloudinary.config({
+  cloud_name: 'rautellin',
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+})
+
+const storage = cloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'products',
+    allowedFormats: ['jpg', 'png'],
+    transformation: [{ width: 500, height: 500, crop: 'limit' }],
+  }
+})
+const parser = multer({ storage })
 
 // MESSAGES
 const ERR_CANNOT_CREATE_USER = 'Could not create user.'
@@ -54,13 +78,12 @@ app.get('/products', async (req, res) => {
 })
 
 // Add products
-app.post('/products', async (req, res) => {
+app.post('/products', parser.single('image'), async (req, res) => {
   try {
-    const { title, image, price, color, description, availableSizes } = req.body
-    const product = new Product({ title, image, price, color, description, availableSizes })
-    const createdProduct = await product.save()
+    const { title, price, color, description, availableSizes } = req.body
+    const product = await new Product({ title, price, color, description, availableSizes, imageUrl: req.file.path, imageId: req.file.filename }).save()
 
-    res.status(201).json({ productId: createdProduct._id, message: PRODUCT_CREATED })
+    res.status(201).json({ productId: product._id, message: PRODUCT_CREATED })
   } catch (err) {
     res.status(400).json({ message: ERR_CANNOT_CREATE_PRODUCT, errors: err.errors })
   }
