@@ -112,6 +112,15 @@ app.post('/products/:id/image', parser.single('image'), async (req, res) => {
   }
 })
 
+app.get('/products/:id', async (req, res) => {
+  const product = await Product.findById(req.params.id)
+  if (product) {
+    res.json(product)
+  } else {
+    res.status(400).json({ message: 'Error message' })
+  }
+})
+
 
 /* ---- USERS ---- */
 
