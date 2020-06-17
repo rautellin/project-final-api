@@ -21,6 +21,9 @@ const Product = mongoose.model('Product', {
   },
   imageUrl: {
     type: String
+  },
+  imageName: {
+    type: String,
   }
 })
 

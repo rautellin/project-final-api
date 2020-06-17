@@ -3,12 +3,12 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt-nodejs'
-import User from './models/user'
-import Product from './models/product'
 import dotenv from 'dotenv'
 import cloudinaryFramework from 'cloudinary'
 import multer from 'multer'
 import cloudinaryStorage from 'multer-storage-cloudinary'
+import User from './models/user'
+import Product from './models/product'
 
 // CLOUDINARY
 dotenv.config()
@@ -33,9 +33,11 @@ const parser = multer({ storage })
 // MESSAGES
 const ERR_CANNOT_CREATE_USER = 'Could not create user.'
 const ERR_CANNOT_CREATE_PRODUCT = 'Could not create product.'
+const ERR_CANNOT_ADD_IMAGE = 'Could not add pictue.'
 const ERR_CANNOT_LOGIN = 'Please try log in again.'
 const ERR_CANNOT_ACCESS = 'Access token is missing or wrong.'
 const PRODUCT_CREATED = 'Product is created.'
+const IMAGE_ADDED = 'Image is added.'
 
 // SERVER SET UP
 
@@ -66,7 +68,7 @@ const authenticateUser = async (req, res, next) => {
 }
 
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send('API for the final project')
 })
 
 /* ---- PRODUCTS ---- */
@@ -77,24 +79,39 @@ app.get('/products', async (req, res) => {
   res.json(products)
 })
 
-// Add products
+// Add product information
 app.post('/products', parser.single('image'), async (req, res) => {
   try {
+    const { title, price, color, category, description, sizes } = req.body
     const product = new Product({
-      title: req.body.title,
-      price: req.body.price,
-      color: req.body.color,
-      category: req.body.category,
-      description: req.body.description,
-      sizes: req.body.sizes,
-      imageUrl: req.file.path
+      title,
+      price,
+      color,
+      category,
+      description,
+      sizes
     })
     const newProduct = await product.save()
     res.status(201).json({ productId: newProduct._id, message: PRODUCT_CREATED })
   } catch (err) {
-    res.status(400).json({ message: ERR_CANNOT_CREATE_PRODUCT, errors: err.errors })
+    res.status(400).json({ message: ERR_CANNOT_CREATE_PRODUCT, errors: err.erros })
   }
 })
+
+// Add picture for product
+app.post('/products/:id/image', parser.single('image'), async (req, res) => {
+  const { id } = req.params
+  try {
+    const updatedProduct = await Product.findOneAndUpdate(
+      { _id: id },
+      { imageUrl: req.file.path, imageName: req.file.filename },
+      { new: true })
+    res.status(201).json(updatedProduct)
+  } catch (err) {
+    res.status(400).json({ message: ERR_CANNOT_ADD_IMAGE, errors: err.erros })
+  }
+})
+
 
 /* ---- USERS ---- */
 
