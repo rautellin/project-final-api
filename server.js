@@ -94,7 +94,7 @@ app.post('/products', parser.single('image'), async (req, res) => {
     const newProduct = await product.save()
     res.status(201).json({ productId: newProduct._id, message: PRODUCT_CREATED })
   } catch (err) {
-    res.status(400).json({ message: ERR_CANNOT_CREATE_PRODUCT, errors: err.erros })
+    res.status(400).json({ message: ERR_CANNOT_CREATE_PRODUCT, errors: err })
   }
 })
 
@@ -108,7 +108,7 @@ app.post('/products/:id/image', parser.single('image'), async (req, res) => {
       { new: true })
     res.status(201).json(updatedProduct)
   } catch (err) {
-    res.status(400).json({ message: ERR_CANNOT_ADD_IMAGE, errors: err.erros })
+    res.status(400).json({ message: ERR_CANNOT_ADD_IMAGE, errors: err })
   }
 })
 
