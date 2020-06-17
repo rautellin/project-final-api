@@ -75,7 +75,6 @@ app.get('/', (req, res) => {
 
 // Get all products
 app.get('/products', async (req, res) => {
-  await Product.deleteMany()
   const products = await Product.find()
   res.json(products)
 })
