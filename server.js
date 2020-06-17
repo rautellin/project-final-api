@@ -92,7 +92,7 @@ app.post('/products', parser.single('image'), async (req, res) => {
       sizes
     })
     const newProduct = await product.save()
-    res.status(201).json(product)
+    res.status(201).json(newProduct)
   } catch (err) {
     res.status(400).json({ message: ERR_CANNOT_CREATE_PRODUCT, errors: err })
   }
