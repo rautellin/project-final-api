@@ -101,17 +101,26 @@ app.post('/products', parser.single('image'), async (req, res) => {
 // Add picture for product
 app.post('/products/:id/image', parser.single('image'), async (req, res) => {
   const { id } = req.params
+  const { path, filename } = req.file
+
+  console.log(`POST /products/${id}/image`)
   try {
-    const updatedProduct = await Product.findOneAndUpdate(
+    await Product.updateOne(
       { _id: id },
-      { imageUrl: req.file.path, imageName: req.file.filename },
-      { new: true })
-    res.status(201).json(updatedProduct)
+      { __v: 1 }
+    )
+    const product = new Product({
+      imageUrl: path,
+      imageName: filename
+    })
+    const updatedproduct = await product.save()
+    res.status(201).json(updatedproduct)
   } catch (err) {
     res.status(400).json({ message: ERR_CANNOT_ADD_IMAGE, errors: err })
   }
 })
 
+// Find a product
 app.get('/products/:id', async (req, res) => {
   const product = await Product.findById(req.params.id)
   if (product) {
