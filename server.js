@@ -82,13 +82,14 @@ app.get('/products', async (req, res) => {
 // Add product information
 app.post('/products', parser.single('image'), async (req, res) => {
   try {
-    const { title, price, color, category, description, sizes } = req.body
+    const { title, price, color, category, description, sizes, availableSizes } = req.body
     const product = new Product({
       title,
       price,
       color,
       category,
       description,
+      availableSizes,
       sizes
     })
     const newProduct = await product.save()
