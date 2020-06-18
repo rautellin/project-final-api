@@ -20,7 +20,14 @@ const Product = mongoose.model('Product', {
     type: Array
   },
   sizes: {
-    type: Array
+    type: Array,
+    default: [
+      'XS',
+      'S',
+      'M',
+      'L',
+      'XL'
+    ]
   },
   imageUrl: {
     type: String
