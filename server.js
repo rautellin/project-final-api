@@ -118,7 +118,7 @@ app.post('/products/:id/image', parser.single('image'), async (req, res) => {
 })
 
 // Find a product
-app.get('/products/:id', async (req, res) => {
+app.get('/product/:id', async (req, res) => {
   const product = await Product.findById(req.params.id)
   if (product) {
     res.json(product)
