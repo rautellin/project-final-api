@@ -16,6 +16,9 @@ const Product = mongoose.model('Product', {
   description: {
     type: String
   },
+  availableSizes: {
+    type: Array
+  },
   sizes: {
     type: Array
   },
