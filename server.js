@@ -25,7 +25,7 @@ const storage = cloudinaryStorage({
   params: {
     folder: 'products',
     allowedFormats: ['jpg', 'png'],
-    transformation: [{ width: 1000, height: 1000, crop: 'limit' }],
+    transformation: [{ width: 1500, height: 1500, crop: 'limit' }],
   }
 })
 const parser = multer({ storage })
