@@ -75,8 +75,20 @@ app.get('/', (req, res) => {
 
 // Get all products
 app.get('/products', async (req, res) => {
-  const products = await Product.find()
+  const { category } = req.query
+  const queryRegex = new RegExp(category, 'i')
+  const products = await Product.find({ category: queryRegex })
   res.json(products)
+})
+
+// Get one product
+app.get('/product/:id', async (req, res) => {
+  const product = await Product.findById(req.params.id)
+  if (product) {
+    res.json(product)
+  } else {
+    res.status(400).json({ message: 'Error message' })
+  }
 })
 
 // Add product information
@@ -114,16 +126,6 @@ app.post('/products/:id/image', parser.single('image'), async (req, res) => {
     res.status(201).json(updatedproduct)
   } catch (err) {
     res.status(400).json({ message: ERR_CANNOT_ADD_IMAGE, errors: err })
-  }
-})
-
-// Find a product
-app.get('/product/:id', async (req, res) => {
-  const product = await Product.findById(req.params.id)
-  if (product) {
-    res.json(product)
-  } else {
-    res.status(400).json({ message: 'Error message' })
   }
 })
 
