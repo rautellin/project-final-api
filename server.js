@@ -36,8 +36,6 @@ const ERR_CANNOT_CREATE_PRODUCT = 'Could not create product.'
 const ERR_CANNOT_ADD_IMAGE = 'Could not add pictue.'
 const ERR_CANNOT_LOGIN = 'Please try log in again.'
 const ERR_CANNOT_ACCESS = 'Access token is missing or wrong.'
-const PRODUCT_CREATED = 'Product is created.'
-const IMAGE_ADDED = 'Image is added.'
 
 // SERVER SET UP
 
@@ -52,7 +50,7 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-// Add middleware to aythenticate user
+// Add middleware to authenticate user
 const authenticateUser = async (req, res, next) => {
   try {
     const user = await User.findOne({ accessToken: req.header('Authorization') })
