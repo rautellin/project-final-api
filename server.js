@@ -9,6 +9,7 @@ import multer from 'multer'
 import cloudinaryStorage from 'multer-storage-cloudinary'
 import User from './models/user'
 import Product from './models/product'
+import Cart from './models/cart'
 
 // CLOUDINARY
 dotenv.config()
@@ -36,6 +37,7 @@ const ERR_CANNOT_CREATE_PRODUCT = 'Could not create product.'
 const ERR_CANNOT_ADD_IMAGE = 'Could not add pictue.'
 const ERR_CANNOT_LOGIN = 'Please try log in again.'
 const ERR_CANNOT_ACCESS = 'Access token is missing or wrong.'
+const ERR_CANNOT_ADD_ITEM = 'Could not add item in cart.'
 
 // SERVER SET UP
 
@@ -127,14 +129,34 @@ app.post('/products/:id/image', parser.single('image'), async (req, res) => {
   }
 })
 
+/* ---- CART ----- */
+
+// Add item to cart
+app.post('/cart', async (req, res) => {
+  try {
+    const { id, title, price, color, selectedSize, imageUrl } = req.body
+    const cartItem = new Cart({
+      id,
+      title,
+      price,
+      color,
+      selectedSize,
+      imageUrl
+    })
+    const newCartItem = await cartItem.save()
+    res.status(201).json(newCartItem)
+  } catch (err) {
+    res.status(400).json({ message: ERR_CANNOT_ADD_ITEM, errors: err })
+  }
+})
+
+// Get items in cart
+app.get('/cart', async (req, res) => {
+  const cartItems = await Cart.find()
+  res.json(cartItems)
+})
 
 /* ---- USERS ---- */
-
-// Get all users
-app.get('/users', async (req, res) => {
-  const users = await User.find()
-  res.json(users)
-})
 
 // Registration route
 app.post('/users', async (req, res) => {
