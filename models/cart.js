@@ -25,4 +25,4 @@ const Cart = mongoose.model('cart', {
   }
 })
 
-export default Product
+export default Cart
