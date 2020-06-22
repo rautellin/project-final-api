@@ -133,14 +133,15 @@ app.post('/products/:id/image', parser.single('image'), async (req, res) => {
 // Add item to cart
 app.post('/cart', async (req, res) => {
   try {
-    const { id, title, price, color, selectedSize, imageUrl } = req.body
+    const { id, title, price, color, selectedSize, imageUrl, quantity } = req.body
     const cartItem = new Cart({
       id,
       title,
       price,
       color,
       selectedSize,
-      imageUrl
+      imageUrl,
+      quantity
     })
     const newCartItem = await cartItem.save()
     res.status(201).json({ message: 'Successfully added item in cart', item: newCartItem })
@@ -155,13 +156,30 @@ app.get('/cart', async (req, res) => {
   res.status(201).json({ message: 'Successfully found items in cart', cartItems: cartItems })
 })
 
-// Update quantity in cart
-app.put("/cart/:id/update", async (req, res) => {
+// Increase quantity in cart
+app.put("/cart/:id/increase", async (req, res) => {
   const { id } = req.params
-  const { qty } = req.query
   try {
-    const updatedCartItem = await Cart.updateOne({ id: id }, { quantity: qty })
-    res.status(201).json({ message: `Updated cart item with id:${id} with a quantity of:${qty}` })
+    const updatedCartItem = await Cart.updateOne({ id: id }, { $inc: { quantity: 1 } })
+    res.status(201).json({ message: `Updated cart item with id:${id}`, item: updatedCartItem })
+  } catch (err) {
+    res.status(400).json({ message: `Could not update cart item with id:${id}`, errors: err })
+  }
+})
+
+// Decrease quantity in cart
+app.put("/cart/:id/decrease", async (req, res) => {
+  const { id } = req.params
+  const product = await Cart.findOne({ id: id })
+  console.log(product)
+  try {
+    if (product.quantity === 1) {
+      const deletedItem = await Cart.deleteOne({ id: id })
+      res.status(201).json({ message: `Deleted cart item`, item: deletedItem })
+    } else {
+      const updatedCartItem = await Cart.updateOne({ id: id }, { $inc: { quantity: -1 } })
+      res.status(201).json({ message: `Updated cart item with id:${id}`, item: updatedCartItem })
+    }
   } catch (err) {
     res.status(400).json({ message: `Could not update cart item with id:${id}`, errors: err })
   }
