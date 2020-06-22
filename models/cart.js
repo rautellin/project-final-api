@@ -15,7 +15,7 @@ const Cart = mongoose.model('cart', {
   },
   quantity: {
     type: Number,
-    default: 0
+    default: 1
   },
   selectedSize: {
     type: String
