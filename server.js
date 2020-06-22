@@ -32,12 +32,11 @@ const storage = cloudinaryStorage({
 const parser = multer({ storage })
 
 // MESSAGES
-const ERR_CANNOT_CREATE_USER = 'Could not create user.'
-const ERR_CANNOT_CREATE_PRODUCT = 'Could not create product.'
-const ERR_CANNOT_ADD_IMAGE = 'Could not add pictue.'
-const ERR_CANNOT_LOGIN = 'Please try log in again.'
-const ERR_CANNOT_ACCESS = 'Access token is missing or wrong.'
-const ERR_CANNOT_ADD_ITEM = 'Could not add item in cart.'
+const ERR_CANNOT_CREATE_USER = 'Could not create user'
+const ERR_CANNOT_CREATE_PRODUCT = 'Could not create product'
+const ERR_CANNOT_ADD_IMAGE = 'Could not add pictue'
+const ERR_CANNOT_LOGIN = 'Please try log in again'
+const ERR_CANNOT_ACCESS = 'Access token is missing or wrong'
 
 // SERVER SET UP
 
@@ -144,16 +143,34 @@ app.post('/cart', async (req, res) => {
       imageUrl
     })
     const newCartItem = await cartItem.save()
-    res.status(201).json(newCartItem)
+    res.status(201).json({ message: 'Successfully added item in cart', item: newCartItem })
   } catch (err) {
-    res.status(400).json({ message: ERR_CANNOT_ADD_ITEM, errors: err })
+    res.status(400).json({ message: 'Could not add item in cart', errors: err })
   }
 })
 
 // Get items in cart
 app.get('/cart', async (req, res) => {
   const cartItems = await Cart.find()
-  res.json(cartItems)
+  res.status(201).json({ message: 'Successfully found items in cart', cartItems: cartItems })
+})
+
+// Update quantity in cart
+app.put("/cart/:id/update", async (req, res) => {
+  const { id } = req.params
+  const { qty } = req.query
+  try {
+    const updatedCartItem = await Cart.updateOne({ id: id }, { quantity: qty })
+    res.status(201).json({ message: `Updated cart item with id:${id} with a quantity of:${qty}` })
+  } catch (err) {
+    res.status(400).json({ message: `Could not update cart item with id:${id}`, errors: err })
+  }
+})
+
+// Delete all items in cart
+app.delete('/cart', async (req, res) => {
+  const cartItems = await Cart.deleteMany()
+  res.status(201).json({ message: 'Successfully deleted items in cart', items: cartItems })
 })
 
 /* ---- USERS ---- */
