@@ -146,7 +146,7 @@ app.post('/cart', async (req, res) => {
     const newCartItem = await cartItem.save()
     res.status(201).json(newCartItem)
   } catch (err) {
-    res.status(400).json({ message: ERR_CANNOT_ADD_ITEM, errors: err })
+    res.status(400).json({ message: ERR_CANNOT_ADD_ITEM, errors: err.errors })
   }
 })
 
