@@ -167,6 +167,13 @@ app.put("/cart/:id/update", async (req, res) => {
   }
 })
 
+// Delete one item in cart
+app.delete('/cart/:id', async (req, res) => {
+  const { id } = req.params
+  const deletedItem = await Cart.deleteOne({ id: id })
+  res.status(201).json({ message: `Successfully deleted item in cart with id:${id}`, item: deletedItem })
+})
+
 // Delete all items in cart
 app.delete('/cart', async (req, res) => {
   const cartItems = await Cart.deleteMany()
