@@ -134,7 +134,7 @@ app.post('/products/:id/image', parser.single('image'), async (req, res) => {
 // Add item to cart
 app.post('/cart', async (req, res) => {
   try {
-    const { productId, title, price, color, selectedSize, imageUrl } = req.body
+    const { id, title, price, color, selectedSize, imageUrl } = req.body
     const cartItem = new Cart({
       id,
       title,
