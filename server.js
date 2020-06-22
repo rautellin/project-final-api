@@ -136,7 +136,7 @@ app.post('/cart', async (req, res) => {
   try {
     const { productId, title, price, color, selectedSize, imageUrl } = req.body
     const cartItem = new Cart({
-      productId,
+      id,
       title,
       price,
       color,
