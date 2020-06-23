@@ -108,7 +108,7 @@ app.get('/clothes', async (req, res) => {
 // Get all accessories
 app.get('/accessories', async (req, res) => {
   const { category } = req.query
-  const queryRegex = new RegExp(category, 'i')
+  const queryRegex = new RegExp(category)
   if (queryRegex) {
     const products = await Product.find({ category: queryRegex })
     res.json(products)
