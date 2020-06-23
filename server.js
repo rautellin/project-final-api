@@ -81,7 +81,7 @@ app.get('/products', async (req, res) => {
 })
 
 // Get all clothes
-app.get('/clothes', async (req, res) => {
+app.get('/products/clothes', async (req, res) => {
   const { category } = req.query
   const queryRegex = new RegExp(category, 'i')
   if (category) {
@@ -106,7 +106,7 @@ app.get('/clothes', async (req, res) => {
 })
 
 // Get all accessories
-app.get('/accessories', async (req, res) => {
+app.get('/products/accessories', async (req, res) => {
   const { category } = req.query
   const queryRegex = new RegExp(category, 'i')
   if (category) {
