@@ -80,6 +80,12 @@ app.get('/products', async (req, res) => {
   res.json(products)
 })
 
+// Get all clothes
+app.get('/clothes', async (req, res) => {
+  const clothes = await Product.find({ category: 'shorts' }, null)
+  res.json(clothes)
+})
+
 // Get one product
 app.get('/product/:id', async (req, res) => {
   const product = await Product.findById(req.params.id)
