@@ -82,7 +82,7 @@ app.get('/products', async (req, res) => {
 
 // Get all clothes
 app.get('/clothes', async (req, res) => {
-  const clothes = await Product.find({ category: 'Shorts' })
+  const clothes = await Product.find({ $or: [{ category: /Shorts/ }, { category: /Bottoms/ }] })
   res.json(clothes)
 })
 
