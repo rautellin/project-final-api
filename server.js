@@ -82,8 +82,48 @@ app.get('/products', async (req, res) => {
 
 // Get all clothes
 app.get('/clothes', async (req, res) => {
-  const clothes = await Product.find({ $or: [{ category: /Shorts/ }, { category: /Bottoms/ }] })
-  res.json(clothes)
+  const { category } = req.query
+  const queryRegex = new RegExp(category, 'i')
+  if (queryRegex) {
+    const products = await Product.find({ category: queryRegex })
+    res.json(products)
+  } else {
+    const products = await Product.find({
+      $or: [
+        { category: /Shorts/ },
+        { category: /Bottoms/ },
+        { category: /Crop/ },
+        { category: /Hoodie/ },
+        { category: /Jacket/ },
+        { category: /Vest/ },
+        { category: /Sports/ },
+        { category: /Swimwear/ },
+        { category: /Vest/ }
+      ]
+    })
+    res.json(products)
+  }
+})
+
+// Get all accessories
+app.get('/accessories', async (req, res) => {
+  const { category } = req.query
+  const queryRegex = new RegExp(category, 'i')
+  if (queryRegex) {
+    const products = await Product.find({ category: queryRegex })
+    res.json(products)
+  } else {
+    const products = await Product.find({
+      $or: [
+        { category: /Socks/ },
+        { category: /Headwear/ },
+        { category: /Bag/ },
+        { category: /Bottle/ },
+        { category: /Equipment/ }
+      ]
+    })
+    res.json(products)
+  }
 })
 
 // Get one product
