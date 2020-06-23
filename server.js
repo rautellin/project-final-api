@@ -74,9 +74,9 @@ app.get('/', (req, res) => {
 
 // Get all products
 app.get('/products', async (req, res) => {
-  const { search } = req.query
-  const queryRegex = new RegExp(search, 'i')
-  if (search) {
+  const { title } = req.query
+  const queryRegex = new RegExp(title, 'i')
+  if (title) {
     const products = await Product.find({ title: `/${queryRegex}/` })
     res.json(products)
   } else {
