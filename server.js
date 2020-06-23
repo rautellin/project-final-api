@@ -84,7 +84,7 @@ app.get('/products', async (req, res) => {
 app.get('/clothes', async (req, res) => {
   const { category } = req.query
   const queryRegex = new RegExp(category, 'i')
-  if (queryRegex) {
+  if (category) {
     const products = await Product.find({ category: queryRegex })
     res.json(products)
   } else {
@@ -111,7 +111,7 @@ app.get('/accessories', async (req, res) => {
   const queryRegex = new RegExp(category, 'i')
   if (category) {
     const products = await Product.find({ category: queryRegex })
-    res.json({ message: 'with', products: products })
+    res.json(products)
   } else {
     const products = await Product.find({
       $or: [
@@ -122,7 +122,7 @@ app.get('/accessories', async (req, res) => {
         { category: /Equipment/ }
       ]
     })
-    res.json({ message: 'without', query: category, products: products })
+    res.json(products)
   }
 })
 
