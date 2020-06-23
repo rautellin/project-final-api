@@ -122,7 +122,7 @@ app.get('/accessories', async (req, res) => {
         { category: /Equipment/ }
       ]
     })
-    res.json({ message: 'without', products: products })
+    res.json({ message: 'without', query: queryRegex, products: products })
   }
 })
 
