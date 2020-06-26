@@ -284,9 +284,7 @@ app.post('/sessions', async (req, res) => {
       res.status(201).json(
         {
           userId: user._id,
-          accessToken: user.accessToken,
-          name: user.name,
-          surname: user.surname
+          accessToken: user.accessToken
         })
     } else {
       res.status(404).json({ notFound: true })
