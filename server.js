@@ -268,8 +268,8 @@ app.post('/users', async (req, res) => {
 app.get('/users/:id', authenticateUser)
 app.get('/users/:id', async (req, res) => {
   res.status(201).json({
-    name: req.user.name,
     userId: req.user._id,
+    name: req.user.name,
     surname: req.user.surname,
     email: req.user.email
   })
