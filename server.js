@@ -266,8 +266,13 @@ app.post('/users', async (req, res) => {
 
 // Logged in route
 app.get('/users/:id', authenticateUser)
-app.get('/users/:id', (req, res) => {
-  res.status(201).json({ secret: 'This is secret' })
+app.get('/users/:id', async (req, res) => {
+  const user = await User.findById(req.params.id)
+  if (user) {
+    res.status(201).json(user)
+  } else {
+    res.status(400).json({ message: 'Error message' })
+  }
 })
 
 // Login route
