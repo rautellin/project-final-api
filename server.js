@@ -267,12 +267,7 @@ app.post('/users', async (req, res) => {
 // Logged in route
 app.get('/users/:id', authenticateUser)
 app.get('/users/:id', async (req, res) => {
-  const user = await User.findById(req.params.id)
-  if (user) {
-    res.status(201).json(user)
-  } else {
-    res.status(400).json({ message: 'Error message' })
-  }
+  res.status(201).json({ name: req.user.name, userId: req.user._id })
 })
 
 // Login route
@@ -281,7 +276,13 @@ app.post('/sessions', async (req, res) => {
     const { email, password } = req.body
     const user = await User.findOne({ email })
     if (user && bcrypt.compareSync(password, user.password)) {
-      res.status(201).json({ userId: user._id, accessToken: user.accessToken })
+      res.status(201).json(
+        {
+          userId: user._id,
+          accessToken: user.accessToken,
+          name: user.name,
+          surname: user.surname
+        })
     } else {
       res.status(404).json({ notFound: true })
     }
