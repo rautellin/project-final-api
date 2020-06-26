@@ -276,7 +276,7 @@ app.get('/users/:id', async (req, res) => {
 })
 
 // Login route
-app.post('/sessions', async (req, res) => {
+app.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body
     const user = await User.findOne({ email })
