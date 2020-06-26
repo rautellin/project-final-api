@@ -267,7 +267,12 @@ app.post('/users', async (req, res) => {
 // Logged in route
 app.get('/users/:id', authenticateUser)
 app.get('/users/:id', async (req, res) => {
-  res.status(201).json({ name: req.user.name, userId: req.user._id })
+  res.status(201).json({
+    name: req.user.name,
+    userId: req.user._id,
+    surname: req.user.surname,
+    email: req.user.email
+  })
 })
 
 // Login route
