@@ -265,8 +265,8 @@ app.post('/users', async (req, res) => {
 })
 
 // Logged in route
-app.get('/users/:id', authenticateUser)
-app.get('/users/:id', async (req, res) => {
+app.get('/user', authenticateUser)
+app.get('/user', async (req, res) => {
   res.status(201).json({
     userId: req.user._id,
     name: req.user.name,
