@@ -265,14 +265,19 @@ app.post('/users', async (req, res) => {
 })
 
 // Logged in route
-app.get('/user', authenticateUser)
-app.get('/user', async (req, res) => {
-  res.status(201).json({
-    userId: req.user._id,
-    name: req.user.name,
-    surname: req.user.surname,
-    email: req.user.email
-  })
+app.get('/user/:id', authenticateUser)
+app.get('/user/:id', async (req, res) => {
+  const user = await User.findById(req.params.id)
+  if (user) {
+    res.status(201).json({
+      userId: req.user._id,
+      name: req.user.name,
+      surname: req.user.surname,
+      email: req.user.email
+    })
+  } else {
+    res.status(400).json({ message: 'Error message' })
+  }
 })
 
 // Login route
